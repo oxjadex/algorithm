@@ -2,31 +2,33 @@
 #include <vector>
 using namespace std;
 
-int n, m;
+int n = 0, m = 0;
 vector<vector<int>> graph;
 vector<bool> visited;
-bool found = false;
+bool realFriend = false;
 
-void dfs(int node, int depth) {
-    if (depth == 4) {
-        found = true;
+void Search(int node, int friendRelation) {
+    if (friendRelation == 4) {
+        realFriend = true;
         return;
     }
 
     visited[node] = true;
 
-    for (int next : graph[node]) {
+    for (int i = 0; i < graph[node].size(); i++) {
+        int next = graph[node][i];
         if (!visited[next]) {
-            dfs(next, depth + 1);
-            if (found) return;  // 경로가 발견되면 바로 종료
+            Search(next, friendRelation+1);
         }
     }
-    visited[node] = false;  // 백트래킹을 위해 방문 기록 초기화
+    visited[node] = false;
+
 }
 
 int main() {
     cin >> n >> m;
     graph.resize(n);
+    visited.resize(n, false);
 
     for (int i = 0; i < m; i++) {
         int u, v;
@@ -36,16 +38,13 @@ int main() {
     }
 
     for (int i = 0; i < n; i++) {
-        visited.assign(n, false);  // 매번 새로운 방문 기록 초기화
-        dfs(i, 0);  // 각 노드에서 깊이 0부터 시작
-        if (found) break;
+        Search(i, 0);
+        if (realFriend) break;
     }
 
-    if (found) {
+    if (realFriend) {
         cout << 1 << endl;
-    } else {
-        cout << 0 << endl;
     }
-
+    else cout << 0 << endl;
     return 0;
 }
