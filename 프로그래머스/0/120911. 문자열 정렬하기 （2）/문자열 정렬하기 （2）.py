@@ -6,6 +6,4 @@ def solution(my_string):
             middle.append(i.lower())
         else: middle.append(i)
     middle.sort()
-    for i in middle:
-        answer+=i
-    return answer
+    return ''.join(middle)
